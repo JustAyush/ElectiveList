@@ -1,0 +1,43 @@
+<% include partials/header.ejs %>
+    <div class="container">
+        <% if (message != '') { %>
+            <p class="text-center text-danger"><%= message %></p>
+        <% } %>
+
+        <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+
+              <div class="form-group col-md-6">
+                <input type="text" class="form-control" name="name" id="first-name" placeholder="Name" required>
+              </div>
+
+              <div class="form-group col-md-6">
+                <input type="text" class="form-control" name="rollno" id="first-name" placeholder="Rollno" required>
+              </div>
+
+              <div class="form-group col-md-6">
+                <select id="last-name" name="section" class="form-control" required>
+                    <option selected disabled>Choose section</option>
+                    <option>BEX</option>
+                    <option>BCT</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-6">
+                <input type="text" class="form-control" name="year" id="first-name" placeholder="Year (Foreg: 072)" required>
+              </div>
+
+              <div class="form-group col-md-12">
+                <select id="last-name" name="semester" class="form-control" required>
+                    <option selected disabled>Choose semester</option>
+                    <option>7</option>
+                    <option>8</option>
+                </select>
+              </div>
+
+            <button type="submit" class="btn btn-primary float-right">Add Student</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<% include partials/header.ejs %>
+  <a class="float-right" href="/<%= course_id %>/student/add" title="Add a New Player">Add Student</a>
+    <div class="table-wrapper">
+      <% if (students.length > 0) {%>
+        <table class="table table-hovered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Rollno</th>
+                    <th scope="col">Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% students.forEach((student, index) => { %>
+                    <tr>
+                        <td> <%= student.name %></td>
+                        <td> <%= student.year %>/<%= student.sec_id %>/<%= student.stu_id %> </td>
+                        <td> <%= student.semester %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+
+      <% } else { %>
+          <p class="text-center">No Electives found. Go <a href="/add" >here</a> to new elective.</p>
+      <% } %>
+
+
+
+
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<% include partials/header.ejs %>
+<div class="container">
+    <% if (message) { %>
+        <p class="text-center text-danger"><%= message %></p>
+    <% } %>
+
+    <% if (course) { %>
+      <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
+          <div class="form-row">
+              <div class="form-group col-md-4">
+                  <select id="last-name" name="updated_course_name" class="form-control" required>
+                      <option selected disabled>Choose Elective Subject</option>
+                      <option>DBMS</option>
+                      <option>EADD</option>
+                      <option>Big Data Technologies</option>
+                      <option>AI</option>
+                  </select>
+              </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary float-right">Edit Elective</button>
+      </form>
+    <% } else { %>
+        <p class="text-center">Player Not Found. Go <a href="/add">here</a> to add players.</p>
+    <% } %>
+</div>
+</div>
+</body>
+</html>
