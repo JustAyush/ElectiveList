@@ -171,6 +171,8 @@ module.exports = {
         ele_id = 3;
       }
 
+      let ins_id = 'T1';
+
       let addStudentQuery = "SELECT * FROM `student` WHERE stu_id = '" + rollno + "'";
 
       db.query(addStudentQuery, (err, result) => {
@@ -185,19 +187,26 @@ module.exports = {
               });
           } else {
 
-            //var pool = mysql.createPool(credentials);
+            let query = "INSERT INTO `student` (stu_id, name, sec_id, year) VALUES ('" +
+                rollno + "', '" + name + "','" + section + "','" + year + "'); " +
+                "INSERT INTO `assigncourse` (id, ele_id, semester, ins_id, sec_id, year) VALUES ('" +
+                    courseId + "', '" + ele_id + "', '" + semester + "', '" + ins_id + "', '"  + section + "', '" + year + "'); " +                   // "INSERT INTO `takes` (id, course_id, sec_id, semester, year, ele_id) VALUES ('" +
+                    "INSERT INTO `takes` (id, course_id, sec_id, semester, year, ele_id) VALUES ('" +
+                        rollno + "', '" + courseId + "','" + section + "','" + semester + "','" + year + "','" + ele_id + "')";
 
-            let query2 ="INSERT INTO `takes` (id, course_id, sec_id, semester, year, ele_id) VALUES ('" +
-             rollno + "', '" + courseId + "','" + section + "','" + semester + "','" + year + "','" + ele_id + "')"; 
-            "INSERT INTO `student` (stu_id, name, sec_id, year) VALUES ('" +
-                rollno + "', '" + name + "','" + section + "','" + year + "')";
-               ;
+            // let query2 = "INSERT INTO `assigncourse` (id, ele_id, semester, ins_id, sec_id, year) VALUES ('" +
+            //     courseId + "', '" + ele_id + "', '" + semester "', '" + ins_id + "', '"  + section + "', '" + year + "')";
+            // let query3 = "INSERT INTO `takes` (id, course_id, sec_id, semester, year, ele_id) VALUES ('" +
+            //     rollno + "', '" + courseId + "','" + section + "','" + semester + "','" + year + "','" + ele_id + "')";
+            // "INSERT INTO `instructor` (ins_id, name) VALUES ('" +
+            // ins_id + 'XYZ' + "'); " +
 
 
-            db.query(query2, (err, result) => {
+            db.query(query, (err, result) => {
                 if (err) {
                     return res.status(500).send(err);
                 }
+                console.log(result);
                 res.redirect('/');
             });
           }
