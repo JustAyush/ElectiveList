@@ -1,0 +1,19 @@
+{
+  "name": "dbms_project",
+  "version": "1.0.0",
+  "description": "project which helps to keep the records of students taking elective subject",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "aatish, alok and ayush",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5",
+    "mysql": "^2.17.1",
+    "req-flash": "0.0.3"
+  }
+}

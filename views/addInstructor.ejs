@@ -1,0 +1,23 @@
+<% include partials/header.ejs %>
+    <div class="container">
+        <% if (message != '') { %>
+            <p class="text-center text-danger"><%= message %></p>
+        <% } %>
+
+        <h3> Add Instructor </h3>
+
+        <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                  <input type="text" class="form-control" name="instructor_name" id="first_name" placeholder="Name" required>
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary float-right">Add Elective</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
