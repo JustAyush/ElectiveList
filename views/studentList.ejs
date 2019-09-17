@@ -1,21 +1,22 @@
 <% include partials/header.ejs %>
-  <a class="float-right" href="/<%= course_id %>/student/add" title="Add a New Player">Add Student</a>
     <div class="table-wrapper">
       <% if (students.length > 0) {%>
         <table class="table table-hovered">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Student Name</th>
-                    <th scope="col">Rollno</th>
+                    <th scope="col">Year/Section/Rollno</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
                 </tr>
             </thead>
             <tbody>
                 <% students.forEach((student, index) => { %>
                     <tr>
-                        <td> <%= student.name %></td>
-                        <td> <%= student.sec_id %>/<%= student.stu_id %> </td>
-                        <td><a href="/<%= course_id %>/student/edit/<%= student.stu_id %>" target="_blank" rel="noopener" class="btn btn-sm btn-success">Edit</a></td>
-                        <td><a href="/delete/<%= course_id %>"class="btn btn-sm btn-danger">Delete</a></td>
+                        <td> <%= student.year %>/<%= student.sec %>/<%= student.stu_id %> </td>
+                        <td> <%= student.first_name %> </td>
+                        <td> <%= student.last_name %> </td>
+                        <td><a href="/student/edit/<%= student.year %>/<%= student.sec %>/<%= student.stu_id %>" target="_blank" rel="noopener" class="btn btn-sm btn-success">Edit</a></td>
+                        <td><a href="/student/delete/<%= student.year %>/<%= student.sec %>/<%= student.stu_id %>"class="btn btn-sm btn-danger">Delete</a></td>
                     </tr>
                 <% }) %>
 
