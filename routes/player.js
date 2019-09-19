@@ -14,7 +14,6 @@ module.exports = {
       if (err) {
         res.redirect('/');
       }
-      console.log(result);
       res.render('instructorList.ejs', {
         title: 'Elective List',
         message: '',
@@ -85,29 +84,45 @@ module.exports = {
       elective3_sec = ' ';
     }
 
-    console.log("-------------------");
-    console.log(elective2);
-    console.log(elective2_sec);
-    console.log(elective3);
-    console.log(elective3_sec);
-
-    let elec2_id_query = "SELECT elec2_id FROM elective2 WHERE elec2_name = '" + elective2 + "' AND elec2_sec = '" + elective2_sec + "';";
-    let elec3_id_query = "SELECT elec3_id FROM elective3 WHERE elec3_name = '" + elective3 + "' AND elec3_sec = '" + elective3_sec + "';";
+    let elec2_id_query = "SELECT * FROM elective2 WHERE elec2_name = '" + elective2 + "' AND elec2_sec = '" + elective2_sec + "';";
+    let elec3_id_query = "SELECT * FROM elective3 WHERE elec3_name = '" + elective3 + "' AND elec3_sec = '" + elective3_sec + "';";
 
 
-    db.query(elec2_id_query, (err, result) => {
+    db.query(elec2_id_query, (err, result1) => {
       if (err) {
         return res.status(500).send(err);
       }
-      let elec2_id = result;
 
-      db.query(elec3_id_query, (err, result) => {
+
+      db.query(elec3_id_query, (err, result2) => {
         if (err) {
           return res.status(500).send(err);
         }
-        let elec3_id = result;
 
-        let query = "INSERT INTO instructor (first_name, last_name, elec2_id, elec3_id) VALUES ('" + f_name+ "', '" + l_name + "', '" + elec2_id + "', '" + elec3_id + "') ;";
+        let elec2_id, elec3_id;
+
+        if(result1.length == 0){
+          elec2_id = null;
+        } else {
+          elec2_id = result1[0].elec2_id;
+        }
+
+        if(result2.length == 0){
+          elec3_id = null;
+        } else {
+          elec3_id = result2[0].elec3_id;
+        }
+
+        let query;
+
+        if (elec2_id ==  null){
+          query = "INSERT INTO instructor (first_name, last_name, elec2_id, elec3_id) VALUES ('" + f_name+ "', '" + l_name + "', NULL , '" + elec3_id + "') ;";
+        } else if (elec3_id ==  null) {
+          query = "INSERT INTO instructor (first_name, last_name, elec2_id, elec3_id) VALUES ('" + f_name+ "', '" + l_name + "', '" + elec2_id + "', NULL) ;";
+        } else {
+          query = "INSERT INTO instructor (first_name, last_name, elec2_id, elec3_id) VALUES ('" + f_name+ "', '" + l_name + "', '" + elec2_id + "', '" + elec3_id + "') ;";
+        }
+
         db.query(query, (err, result) => {
           if (err) {
             return res.status(500).send(err);
@@ -161,41 +176,65 @@ module.exports = {
 
     let elective2_section = req.body.elective2;
 
+    let elective2, elective3, elective2_sec, elective3_sec;
+
     try{
-      let elective2 = elective2_section.split(" ")[0];
-      let elective2_sec = elective2_section.split(" ")[1];
+      elective2_sec = elective2_section.match(/\(([^)]+)\)/)[1];
+      elective2 = elective2_section.replace(/\([^\)]*\)/g, '').match(/(\S+)/g);
+      elective2 = elective2.join(' ');
+
     } catch(err){
-      elective2 = null;
-      elective2_sec = null;
+      elective2 = ' ';
+      elective2_sec = ' ';
     }
 
     let elective3_section = req.body.elective3;
 
     try{
-      let elective3 = elective3_section.split(" ")[0];
-      let elective3_sec = elective3_section.split(" ")[1];
+      elective3_sec = elective3_section.match(/\(([^)]+)\)/)[1];
+      elective3 = elective3_section.replace(/\([^\)]*\)/g, '').match(/(\S+)/g);
+      elective3 = elective3.join(' ');
     } catch(err){
-      elective3 = null;
-      elective3_sec = null;
+      elective3 = ' ';
+      elective3_sec = ' ';
     }
 
     let elec2_id_query = "SELECT elec2_id FROM elective2 WHERE elec2_name = '" + elective2 + "' AND elec2_sec = '" + elective2_sec + "';";
     let elec3_id_query = "SELECT elec3_id FROM elective3 WHERE elec3_name = '" + elective3 + "' AND elec3_sec = '" + elective3_sec + "';";
 
-
-    db.query(elec2_id_query, (err, result) => {
+    db.query(elec2_id_query, (err, result1) => {
       if (err) {
         return res.status(500).send(err);
       }
-      let elec2_id = result;
 
-      db.query(elec3_id_query, (err, result) => {
+      db.query(elec3_id_query, (err, result2) => {
         if (err) {
           return res.status(500).send(err);
         }
-        let elec3_id = result;
 
-        let query = "UPDATE `instructor` SET `first_name` = '" + f_name + "', `last_name` = '" + l_name + "', `elec2_id` = '" + elec2_id + "', `elec3_id` = '" + elec3_id + "' WHERE ins_id = '" + ins_id + "';";
+        let elec2_id, elec3_id;
+
+        if(result1.length == 0){
+          elec2_id = null;
+        } else {
+          elec2_id = result1[0].elec2_id;
+        }
+
+        if(result2.length == 0){
+          elec3_id = null;
+        } else {
+          elec3_id = result2[0].elec3_id;
+        }
+
+        let query;
+
+        if (elec2_id ==  null){
+          query = "UPDATE `instructor` SET `first_name` = '" + f_name + "', `last_name` = '" + l_name + "', `elec2_id` = NULL , `elec3_id` = '" + elec3_id + "' WHERE ins_id = '" + ins_id + "';";
+        } else if (elec3_id ==  null) {
+          query = "UPDATE `instructor` SET `first_name` = '" + f_name + "', `last_name` = '" + l_name + "', `elec2_id` = '" + elec2_id + "', `elec3_id` = NULL WHERE ins_id = '" + ins_id + "';";
+        } else {
+          query = "UPDATE `instructor` SET `first_name` = '" + f_name + "', `last_name` = '" + l_name + "', `elec2_id` = '" + elec2_id + "', `elec3_id` = '" + elec3_id + "' WHERE ins_id = '" + ins_id + "';";
+        }
 
         db.query(query, (err, result) => {
           if (err) {
@@ -210,6 +249,20 @@ module.exports = {
 
   },
 
+  deleteInstructor: (req, res) => {
+
+    let ins_id = req.params.id;
+
+    let query = "DELETE FROM `instructor` WHERE ins_id = '" + ins_id + "';";
+
+    db.query(query, (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      res.redirect('/instructor');
+    });
+
+  },
 
   // for courses
   addPlayerPage: (req, res) => {
@@ -256,9 +309,6 @@ module.exports = {
     //   }
     // }
     ins_id = parseInt(instructor_name);
-
-    console.log(ins_id);
-
 
     if (course_name == 'DBMS') {
       course_id = 100;
@@ -339,11 +389,7 @@ module.exports = {
     let section = req.body.section_name;
     let elective_no = req.body.elective_no;
 
-    console.log(section);
-
     let ins_id = parseInt(ins_name);
-
-    console.log(courseId);
 
     let query = "UPDATE `assigncourse` SET `ins_id` = '" + ins_id + "', `sec_id` = '" + section + "', `ele_id` = '" + elective_no + "' WHERE id = '" + courseId + "'";
     db.query(query, (err, result) => {
@@ -427,7 +473,7 @@ module.exports = {
           if (err) {
             return res.status(500).send(err);
           }
-          res.render('addStudent.ejs');
+          res.redirect('/student');
         });
 
       }
