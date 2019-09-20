@@ -1,0 +1,48 @@
+<% include partials/header.ejs %>
+<div class="container">
+    <% if (message) { %>
+        <p class="text-center text-danger"><%= message %></p>
+    <% } %>
+
+    <% if (course) { %>
+      <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
+          <div class="form-row">
+
+            <!-- <div class="form-group col-md-4">
+                <select id="last-name" name="course_name" class="form-control" required>
+                    <option selected disabled>Choose Elective Subject</option>
+                    <option>DBMS</option>
+                    <option>EADD</option>
+                    <option>Big Data Technologies</option>
+                    <option>AI</option>
+                </select>
+            </div> -->
+
+            <div class="form-group col-md-4">
+                <select id="last-name" name="instructor_name" class="form-control" required>
+                  <option selected disabled>Choose instructor</option>
+                <% ins_list.forEach((ins, index) => { %>
+                    <option><%= ins.ins_id %> <%= ins.name %></option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="form-group col-md-4">
+                <select id="last_name" name="section_name" class="form-control" required>
+                    <option selected disabled>Choose section</option>
+                    <option>BEX</option>
+                    <option>BCT</option>
+                </select>
+            </div>
+
+          </div>
+
+          <button type="submit" class="btn btn-primary float-right">Edit Elective</button>
+      </form>
+    <% } else { %>
+        <p class="text-center">Player Not Found. Go <a href="/add">here</a> to add players.</p>
+    <% } %>
+</div>
+</div>
+</body>
+</html>
