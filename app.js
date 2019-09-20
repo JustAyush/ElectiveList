@@ -5,10 +5,12 @@ const mysql = require('mysql');
 const path = require('path');
 const app = express();
 
-const {getHomePage} = require('./routes/index');
-const {addPlayerPage, addCourse, deletePlayer, editPlayer, editPlayerPage,
+const {getHomePage, postHomePage} = require('./routes/index');
+const {
+      addPlayerPage, addCourse, deletePlayer, editPlayer, editPlayerPage,
       getStudentList, addStudentPage, addStudent, editStudentPage, editStudent, deleteStudent,
-      getInstructorList, addInstructor, addInstructorPage, editInstructorPage, editInstructor, deleteInstructor} = require('./routes/player');
+      getInstructorList, addInstructor, addInstructorPage, editInstructorPage, editInstructor, deleteInstructor, assignCourse, assignCoursePage, assignCourseList,assignCourseEditPage,assignCourseEdit,assignCourseDelete
+      } = require('./routes/player');
 
 const port = 5000;
 
@@ -57,14 +59,26 @@ app.use(fileUpload()); // configure fileupload
 // app.post('/add', addCourse);
 // app.post('/edit/:id', editPlayer);
 
+// route for homepage
+app.get('/', getHomePage);
+app.post('/', postHomePage);
+
+//routes for assignCourseapp.get('/student/assigncourse/:year/:sec/:id',assignCoursePage);
+app.post('/student/assigncourse/:year/:sec/:id',assignCourse);
+app.get('/student/assigncourse/:year/:sec/:id',assignCoursePage);
+app.get('/:year/:sec/student/assigncourselist',assignCourseList);
+app.get('/student/assigncourse/edit/:year/:sec/:id',assignCourseEditPage);
+app.post('/student/assigncourse/edit/:year/:sec/:id',assignCourseEdit);
+app.get('/student/assigncourse/delete/:year/:sec/:id',assignCourseDelete);
 
 // routes for Student
-app.get('/student/', getStudentList);
+app.get('/:year/:sec/student/', getStudentList);
 app.get('/student/add', addStudentPage);
 app.post('/student/add', addStudent);
 app.get('/student/edit/:year/:sec/:id', editStudentPage);
 app.post('/student/edit/:year/:sec/:id', editStudent);
 app.get('/student/delete/:year/:sec/:id', deleteStudent);
+
 
 //routes for instructor_name
 app.get('/instructor/', getInstructorList);

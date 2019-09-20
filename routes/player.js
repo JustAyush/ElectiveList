@@ -2,6 +2,268 @@ const fs = require('fs');
 
 module.exports = {
 
+  assignCoursePage: (req, res) => {
+
+    let elective2 = 'SELECT * FROM elective2';
+    let elective3 = 'SELECT * FROM elective3';
+
+    db.query(elective2, (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      let elective2_list = result;
+
+      db.query(elective3, (err, result) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        let elective3_list = result;
+
+        res.render('assignCourse.ejs', {
+          title: 'Elective List',
+          message: '',
+          elective2: elective2_list,
+          elective3: elective3_list,
+        });
+      });
+
+    });
+
+  },
+  assignCourse: (req, res) => {
+
+    let year = req.params.year;
+    let sec = req.params.sec;
+    let id = req.params.id;
+
+    let elective2_section = req.body.elective2;
+    let elective2, elective2_sec, elective3, elective3_sec;
+
+    try{
+      elective2_sec = elective2_section.match(/\(([^)]+)\)/)[1];
+      elective2 = elective2_section.replace(/\([^\)]*\)/g, '').match(/(\S+)/g);
+      elective2 = elective2.join(' ');
+
+    } catch(err){
+      elective2 = ' ';
+      elective2_sec = ' ';
+    }
+
+    let elective3_section = req.body.elective3;
+
+    try{
+      elective3_sec = elective3_section.match(/\(([^)]+)\)/)[1];
+      elective3 = elective3_section.replace(/\([^\)]*\)/g, '').match(/(\S+)/g);
+      elective3 = elective3.join(' ');
+    } catch(err){
+      elective3 = ' ';
+      elective3_sec = ' ';
+    }
+
+    let elec2_id_query = "SELECT * FROM elective2 WHERE elec2_name = '" + elective2 + "' AND elec2_sec = '" + elective2_sec + "';";
+    let elec3_id_query = "SELECT * FROM elective3 WHERE elec3_name = '" + elective3 + "' AND elec3_sec = '" + elective3_sec + "';";
+
+
+    db.query(elec2_id_query, (err, result1) => {
+      if (err) {
+        res.render('assignCourseEdit.ejs', {
+          title: 'Elective List',
+          message: 'Elective 2 already assigned',
+          elective2: elective2_list,
+          elective3: elective3_list,
+        });
+      }
+
+
+      db.query(elec3_id_query, (err, result2) => {
+        if (err) {
+          res.render('assignCourseEdit.ejs', {
+            title: 'Elective List',
+            message: 'Elective 3 already assigned',
+            elective2: elective2_list,
+            elective3: elective3_list,
+          });
+        }
+
+        let elec2_id, elec3_id;
+
+        if(result1.length == 0){
+          elec2_id = null;
+        } else {
+          elec2_id = result1[0].elec2_id;
+        }
+
+        if(result2.length == 0){
+          elec3_id = null;
+        } else {
+          elec3_id = result2[0].elec3_id;
+        }
+
+        let query;
+
+        if (elec2_id!= null && elec3_id!=null){
+          query = "INSERT INTO takes (year, sec, stu_id, elec2_id, elec3_id) VALUES ('" + year+ "', '" + sec + "' , '" + id+ "', '" + elec2_id+ "', '" + elec3_id+ "') ;";
+        }
+         else {
+          return res.send("both the electveII and electiveIII should be chosen!!");
+        }
+
+        db.query(query, (err, result) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+
+          res.redirect(`/${year}/${sec}/student/assignCourseList`);
+        });
+
+      });
+    });
+
+  },
+  assignCourseList: (req, res) => {
+
+    let year = req.params.year;
+    let sec = req.params.sec;
+
+    let query = "SELECT * FROM (((takes LEFT JOIN elective2 ON takes.elec2_id = elective2.elec2_id) LEFT JOIN elective3 ON takes.elec3_id = elective3.elec3_id) LEFT JOIN student ON takes.year = student.year && takes.sec = student.sec && takes.stu_id = student.stu_id) WHERE student.year = '" + year + "' AND student.sec = '" + sec + "';";// query database to get all the players
+
+    // execute query
+    db.query(query, (err, result) => {
+      if (err) {
+        res.redirect('/');
+      }
+
+      res.render('assignCourseList.ejs', {
+        title: 'Assigned Course List',
+        assigncourses: result,
+        year: year,
+        sec: sec
+      });
+    });
+
+  },
+  assignCourseEditPage: (req, res) => {
+
+   let elective2 = 'SELECT * FROM elective2';
+   let elective3 = 'SELECT * FROM elective3';
+
+   db.query(elective2, (err, result) => {
+     if (err) {
+       return res.status(500).send(err);
+     }
+
+     let elective2_list = result;
+
+     db.query(elective3, (err, result) => {
+       if (err) {
+         return res.status(500).send(err);
+       }
+
+       let elective3_list = result;
+
+       res.render('assignCourseEdit.ejs', {
+         title: 'Elective List',
+         message: '',
+         elective2: elective2_list,
+         elective3: elective3_list,
+       });
+     });
+
+   });
+
+ },
+  assignCourseDelete: (req, res) =>  {
+
+    let year = req.params.year;
+    let section = req.params.sec;
+    let stu_id = req.params.id;
+
+    let query = "DELETE FROM `takes` WHERE year = '" + year + "' AND  sec = '" + section + "' AND stu_id = '" + stu_id + "';";
+
+    db.query(query, (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      res.redirect(`/${year}/${section}/student/assignCourseList`);
+    });
+
+  },
+
+  assignCourseEdit:(req, res) => {
+
+    let stu_id = req.params.id;
+    let year = req.params.year;
+    let sec = req.params.sec;
+    let elective2_section = req.body.elective2;
+
+    let elective2, elective3, elective2_sec, elective3_sec;
+
+    try{
+      elective2_sec = elective2_section.match(/\(([^)]+)\)/)[1];
+      elective2 = elective2_section.replace(/\([^\)]*\)/g, '').match(/(\S+)/g);
+      elective2 = elective2.join(' ');
+
+    } catch(err){
+      elective2 = ' ';
+      elective2_sec = ' ';
+    }
+
+    let elective3_section = req.body.elective3;
+
+
+    try{
+      elective3_sec = elective3_section.match(/\(([^)]+)\)/)[1];
+      elective3 = elective3_section.replace(/\([^\)]*\)/g, '').match(/(\S+)/g);
+      elective3 = elective3.join(' ');
+    } catch(err){
+      elective3 = ' ';
+      elective3_sec = ' ';
+    }
+
+    let elec2_id_query = "SELECT elec2_id FROM elective2 WHERE elec2_name = '" + elective2 + "' AND elec2_sec = '" + elective2_sec + "';";
+    let elec3_id_query = "SELECT elec3_id FROM elective3 WHERE elec3_name = '" + elective3 + "' AND elec3_sec = '" + elective3_sec + "';";
+
+    db.query(elec2_id_query, (err, result1) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      db.query(elec3_id_query, (err, result2) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        let elec2_id, elec3_id;
+
+        if(result1.length == 0){
+          elec2_id = null;
+        } else {
+          elec2_id = result1[0].elec2_id;
+        }
+
+        if(result2.length == 0){
+          elec3_id = null;
+        } else {
+          elec3_id = result2[0].elec3_id;
+        }
+
+
+
+
+            let query = "UPDATE `takes` SET `elec2_id` = '" + elec2_id + "', `elec3_id` = '" + elec3_id + "' WHERE year = '" + year + "' AND  sec = '" + sec + "' AND stu_id = '" + stu_id + "';";
+
+            db.query(query, (err, result) => {
+              if (err) {
+                return res.status(500).send(err);
+              }
+              res.redirect(`/${year}/${sec}/student/assignCourseList`);
+            });
+          });
+        });
+  },
+
   // for instructor
   getInstructorList: (req, res) => {
 
@@ -23,37 +285,6 @@ module.exports = {
     });
 
     },
-
-  addInstructorPage: (req, res) => {
-
-    let elective2 = 'SELECT * FROM elective2';
-    let elective3 = 'SELECT * FROM elective3';
-
-    db.query(elective2, (err, result) => {
-      if (err) {
-        return res.status(500).send(err);
-      }
-
-      let elective2_list = result;
-
-      db.query(elective3, (err, result) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-
-        let elective3_list = result;
-
-        res.render('addInstructor.ejs', {
-          title: 'Elective List',
-          message: '',
-          elective2: elective2_list,
-          elective3: elective3_list,
-        });
-      });
-
-    });
-
-  },
 
   addInstructor: (req, res) => {
 
@@ -132,6 +363,37 @@ module.exports = {
         });
 
       });
+    });
+
+  },
+
+  addInstructorPage: (req, res) => {
+
+    let elective2 = 'SELECT * FROM elective2';
+    let elective3 = 'SELECT * FROM elective3';
+
+    db.query(elective2, (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      let elective2_list = result;
+
+      db.query(elective3, (err, result) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        let elective3_list = result;
+
+        res.render('addInstructor.ejs', {
+          title: 'Elective List',
+          message: '',
+          elective2: elective2_list,
+          elective3: elective3_list,
+        });
+      });
+
     });
 
   },
@@ -418,7 +680,10 @@ module.exports = {
 
   getStudentList: (req, res) => {
 
-    let query = 'SELECT * FROM student;';// query database to get all the players
+    let year = req.params.year;
+    let sec = req.params.sec;
+
+    let query = "SELECT * FROM student WHERE year = '" + year + "' AND sec  = '" + sec + "';";// query database to get all the players
 
     // execute query
     db.query(query, (err, result) => {
@@ -428,7 +693,9 @@ module.exports = {
 
       res.render('studentList.ejs', {
         title: 'Elective List',
-        students: result
+        students: result,
+        year: year,
+        sec: sec
       });
     });
 
@@ -473,7 +740,7 @@ module.exports = {
           if (err) {
             return res.status(500).send(err);
           }
-          res.redirect('/student');
+          res.redirect(`/${year}/${section}/student`);
         });
 
       }
@@ -505,7 +772,7 @@ module.exports = {
       if (err) {
         return res.status(500).send(err);
       }
-      res.redirect('/student');
+      res.redirect(`/${year}/${section}/student`);
     });
 
   },
@@ -522,7 +789,7 @@ module.exports = {
       if (err) {
         return res.status(500).send(err);
       }
-      res.redirect('/student');
+      res.redirect(`/${year}/${section}/student`);
     });
 
   },
