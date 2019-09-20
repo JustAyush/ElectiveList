@@ -5,11 +5,12 @@ const mysql = require('mysql');
 const path = require('path');
 const app = express();
 
-const {getHomePage, postHomePage} = require('./routes/index');
+const {getHomePage, postHomePage, getStudentListFromHome, getElectiveList} = require('./routes/index');
 const {
       addPlayerPage, addCourse, deletePlayer, editPlayer, editPlayerPage,
       getStudentList, addStudentPage, addStudent, editStudentPage, editStudent, deleteStudent,
-      getInstructorList, addInstructor, addInstructorPage, editInstructorPage, editInstructor, deleteInstructor, assignCourse, assignCoursePage, assignCourseList,assignCourseEditPage,assignCourseEdit,assignCourseDelete
+      getInstructorList, addInstructor, addInstructorPage, editInstructorPage, editInstructor, deleteInstructor, assignCourse, assignCoursePage, assignCourseList,assignCourseEditPage,assignCourseEdit,assignCourseDelete,
+      electiveList
       } = require('./routes/player');
 
 const port = 5000;
@@ -62,6 +63,9 @@ app.use(fileUpload()); // configure fileupload
 // route for homepage
 app.get('/', getHomePage);
 app.post('/', postHomePage);
+app.post('/getStudentList', getStudentListFromHome);
+app.post('/getElectiveList', getElectiveList);
+app.get('/:elec_no/:sec/elective', electiveList);
 
 //routes for assignCourseapp.get('/student/assigncourse/:year/:sec/:id',assignCoursePage);
 app.post('/student/assigncourse/:year/:sec/:id',assignCourse);

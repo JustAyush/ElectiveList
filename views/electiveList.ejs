@@ -1,22 +1,32 @@
 <% include partials/header.ejs %>
     <div class="table-wrapper">
-      <% if (courses.length > 0) {%>
+
+      <% if (electiveList.length > 0) {%>
         <table class="table table-hovered">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Course_id</th>
-                    <th scope="col">Course_name</th>
+                    <th scope="col">Subject Code</th>
+                    <th scope="col">Subject Name</th>
+                    <th scope="col">Instructor</th>
                 </tr>
             </thead>
             <tbody>
-                <% courses.forEach((course, index) => { %>
-                    <tr>
-                        <td><%= course.course_id %></td>
-                        <td><a href="/student/<%= course.course_id %>"> <%= course.title %></a></td>
-                        <td>
-                            <a href="/edit/<%= course.course_id %>" target="_blank" rel="noopener" class="btn btn-sm btn-success">Edit</a>
-                            <a href="/delete/<%= course.course_id %>"class="btn btn-sm btn-danger">Delete</a>
-                        </td>
+
+                <% electiveList.forEach((elec, index) => { %>
+                  <tr>
+                  <% if (elec_no == 2 ){%>
+
+                      <td><%= elec.elec2_id %></td>
+                      <td><%= elec.elec2_name %></td>
+                      <td><%= elec.first_name %> <%= elec.last_name %></td>
+                    
+                    <%} else {%>
+
+                      <td><%= elec.elec3_id %></td>
+                      <td><%= elec.elec3_name %></td>
+                      <td><%= elec.first_name %> <%= elec.last_name %></td>
+
+                    <% } %>
                     </tr>
                 <% }) %>
             </tbody>

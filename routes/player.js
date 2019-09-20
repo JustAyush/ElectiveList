@@ -794,6 +794,33 @@ module.exports = {
 
   },
 
+  electiveList: (req, res) => {
+
+    let elec_no = req.params.elec_no;
+    let section = req.params.sec;
+
+    let query;
+    if(elec_no == 2){
+      query = "SELECT elective2.elec2_id, elective2.elec2_name, instructor.first_name, instructor.last_name FROM elective2 LEFT JOIN instructor ON elective2.elec2_id = instructor.elec2_id WHERE elective2.elec2_sec = '" + section + "';";
+    } else {
+      query = "SELECT elective3.elec3_id, elective3.elec3_name, instructor.first_name, instructor.last_name FROM elective3 LEFT JOIN instructor ON elective3.elec3_id = instructor.elec3_id WHERE elective3.elec3_sec = '" + section + "';";
+    }
+
+    db.query(query, (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      res.render('electiveList.ejs', {
+        message: '',
+        title: 'ELective List',
+        electiveList: result,
+        elec_no: elec_no
+      });
+    });
+
+  },
+
 
 
 };
