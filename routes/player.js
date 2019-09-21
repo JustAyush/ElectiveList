@@ -815,8 +815,209 @@ module.exports = {
         message: '',
         title: 'ELective List',
         electiveList: result,
-        elec_no: elec_no
+        elec_no: elec_no,
+        sec: section
       });
+    });
+
+  },
+
+  getFinalList: (req, res) => {
+
+    let year = req.params.year;
+    let section = req.params.sec;
+
+    // query to find arrays elec2_id_array = ['EX201', 'EX304'] and elec3_id_array = ['BC394']
+    let query = "SELECT DISTINCT t.elec2_id FROM (takes AS t LEFT JOIN elective2 AS e2 ON t.elec2_id = e2.elec2_id) WHERE t.year=? AND t.sec=?; "
+              + "SELECT DISTINCT t.elec3_id FROM (takes AS t LEFT JOIN elective3 AS e3 ON t.elec3_id = e3.elec3_id) WHERE t.year=? AND t.sec=?;";
+
+    db.query(query, [year, section, year, section], (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      let elec2_id_array = [], elec3_id_array = [];
+
+      result[0].forEach((e2) => {
+        elec2_id_array.push(e2.elec2_id);
+      })
+
+      result[1].forEach((e3) => {
+        elec3_id_array.push(e3.elec3_id);
+      })
+
+      // query to find the necessary details of elective 2 assigned along with student details
+      let queryElec2 = "";
+      elec2_id_array.forEach((e2) => {
+        queryElec2 += "SELECT t.year, t.sec, t.stu_id, t.elec2_id, s.first_name, s.last_name, e2.elec2_name, e2.elec2_sec " +
+                      "FROM ((takes AS t LEFT JOIN student AS s ON t.year = s.year AND t.sec = s.sec AND t.stu_id = s.stu_id) " +
+  	                  "LEFT JOIN elective2 AS e2 ON t.elec2_id = e2.elec2_id) " +
+                      "WHERE t.year = '" + year + "' AND t.sec= '" + section + "' AND t.elec2_id = '" + e2 + "'; ";
+                    })
+
+      db.query(queryElec2, (err, result1) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        // query to find the necessary details of elective 3 assigned along with student details
+        let queryElec3 = "";
+        elec3_id_array.forEach((e3) => {
+          queryElec3 += "SELECT t.year, t.sec, t.stu_id, t.elec3_id, s.first_name, s.last_name, e3.elec3_name, e3.elec3_sec " +
+                        "FROM ((takes AS t LEFT JOIN student AS s ON t.year = s.year AND t.sec = s.sec AND t.stu_id = s.stu_id) " +
+    	                  "LEFT JOIN elective3 AS e3 ON t.elec3_id = e3.elec3_id) " +
+                        "WHERE t.year = '" + year + "' AND t.sec= '" + section + "' AND t.elec3_id = '" + e3 + "'; ";
+                      })
+
+        db.query(queryElec3, (err, result2) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+
+          // query to find the number of students allocated under particular elective 2
+          let queryElec2Num = "";
+          elec2_id_array.forEach((e2) => {
+              queryElec2Num += "SELECT COUNT(DISTINCT t.stu_id) AS num FROM takes AS t LEFT JOIN student AS s ON t.year = s.year AND t.sec = s.sec AND t.stu_id = s.stu_id " +
+              "WHERE t.year = '" + year + "' AND t.sec= '" + section + "' AND t.elec2_id = '" + e2 + "'; ";
+              })
+
+          db.query(queryElec2Num, (err, result) => {
+            if (err) {
+              return res.status(500).send(err);
+            }
+
+            let elec2_num = [];
+
+            if(result.length == 1){
+              result.forEach((r => {
+                  elec2_num.push(r.num);
+              }))
+            } else {
+              result.forEach((r => {
+                  elec2_num.push(r[0].num);
+              }))
+            }
+
+            let elec2_obj =  elec2_num.reduce(function(result, field, index) {
+                result[elec2_id_array[index]] = field;
+                return result;
+              }, {});
+
+              // query to find the number of students allocated under particular elective 3
+              let queryElec3Num = "";
+              elec3_id_array.forEach((e3) => {
+                  queryElec3Num += "SELECT COUNT(DISTINCT t.stu_id) AS num FROM takes AS t LEFT JOIN student AS s ON t.year = s.year AND t.sec = s.sec AND t.stu_id = s.stu_id " +
+                  "WHERE t.year = '" + year + "' AND t.sec= '" + section + "' AND t.elec3_id = '" + e3 + "'; ";
+                  })
+
+              db.query(queryElec3Num, (err, result) => {
+                if (err) {
+                  return res.status(500).send(err);
+                }
+
+                let elec3_num = [];
+                if(result.length == 1){
+                  result.forEach((r => {
+                      elec3_num.push(r.num);
+                  }))
+                } else {
+                  result.forEach((r => {
+                      elec3_num.push(r[0].num);
+                  }))
+                }
+
+                let elec3_obj =  elec3_num.reduce(function(result, field, index) {
+                    result[elec3_id_array[index]] = field;
+                    return result;
+                  }, {});
+
+
+                  let elec2 = [], elec3 = [];
+
+                  // check if the array is nested
+                  if (!Array.isArray(result1[0])){
+                    result1.forEach((r1, index) => {
+                      elec2.push(r1);
+                    })
+                  } else {
+                    for(let i=0; i< result1.length; i++){
+                    result1[i].forEach((r1, index) => {
+                      elec2.push(r1);
+                    })
+                  }
+                  }
+
+                  // check if the array is nested
+                  if (!Array.isArray(result2[0])){
+                    result2.forEach((r2, index) => {
+                      elec3.push(r2);
+                    })
+                  } else {
+                    for(let i=0; i< result2.length; i++){
+                      result2[i].forEach((r2, index) => {
+                        elec3.push(r2);
+                    })
+                  }
+                  }
+
+                  let elec2_array_k = Object.keys(elec2_obj);
+                  let elec3_array_k = Object.keys(elec3_obj);
+                  let elec2_array_v = Object.values(elec2_obj);
+                  let elec3_array_v = Object.values(elec3_obj);
+
+                  // console.log('--------elec2-----------');
+                  // console.log(elec2_obj);
+                  // console.log(elec2);
+                  // console.log('-------elec3------------');
+                  // console.log(elec3_obj);
+                  // console.log(elec3);
+
+                  let elec2_suff = [], elec2_not_suff = [];
+
+                  for(let i=0; i<elec2_array_v.length; i++){
+                    if (elec2_array_v[i] > 2) {
+                      elec2_suff.push(elec2_array_k[i]);
+                    } else {
+                      elec2_not_suff.push(elec2_array_k[i]);
+                    }
+                  }
+
+                  let elec3_suff = [], elec3_not_suff = [];
+
+                  for(let i=0; i<elec3_array_v.length; i++){
+                    if (elec3_array_v[i] > 2) {
+                      elec3_suff.push(elec3_array_k[i]);
+                    } else {
+                      elec3_not_suff.push(elec3_array_k[i]);
+                    }
+                  }
+
+                  res.render('finalList.ejs', {
+                    message: '',
+                    title: 'ELective List (Final)',
+                    elec2_obj: elec2_obj,
+                    elec3_obj: elec3_obj,
+                    elec2_array: elec2_array_k,
+                    elec3_array: elec3_array_k,
+                    elec2_len: result1.length,
+                    elec3_len: result2.length,
+                    elec2: elec2,
+                    elec3: elec3,
+                    elec2_suff: elec2_suff,
+                    elec2_not_suff: elec2_not_suff,
+                    elec3_suff: elec3_suff,
+                    elec3_not_suff: elec3_not_suff,
+                    year: year,
+                    section: section
+                  });
+
+              });
+          });
+
+        });
+
+      });
+
     });
 
   },

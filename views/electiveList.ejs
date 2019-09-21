@@ -2,6 +2,7 @@
     <div class="table-wrapper">
 
       <% if (electiveList.length > 0) {%>
+        <h4> Elective <%= elec_no %> List (<%= sec %>)</h4>
         <table class="table table-hovered">
             <thead class="thead-dark">
                 <tr>
@@ -19,7 +20,7 @@
                       <td><%= elec.elec2_id %></td>
                       <td><%= elec.elec2_name %></td>
                       <td><%= elec.first_name %> <%= elec.last_name %></td>
-                    
+
                     <%} else {%>
 
                       <td><%= elec.elec3_id %></td>

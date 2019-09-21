@@ -1,0 +1,210 @@
+<% include partials/header.ejs %>
+
+  <div class="container" style="padding-left: 4em; padding-right:4em;">
+
+  <% if ((elec2_array.length > 0) || (elec3_array.length > 0)) {%>
+    <h2 style="text-align: center; font-weight: bold; padding-top:1.5em; padding-bottom:1em;"> ELECTIVE STUDENT LIST (YEAR : <%= year %> , SECTION: <%= section %> )</h2>
+    <button class="btn btn-primary" onclick="window.print()" style="float:right;"> Print The List</button>
+  <% } %>
+  <!-- for elective 2 which has sufficient number of students  -->
+  <% if (elec2_array.length > 0) {%>
+
+    <% if (elec2_suff.length > 0) {%>
+      <h4 style="text-align: center; text-decoration: underline;"> Elective 2 (Sufficient) </h4>
+      <% elec2_array.forEach((e2c, index) => { %>
+
+        <% if (elec2_suff.includes(e2c)) {%>
+          <div class="table-wrapper">
+
+          <h5 style="padding-bottom: 0.5em;"> <% for (let i=0; i< elec2.length; i++) { %>
+
+              <% if (e2c == elec2[i].elec2_id) {%>
+                <%= elec2[i].elec2_name %>
+                  <% break %>
+              <% } %>
+
+            <% } %> (<%= e2c %>) </h5>
+
+              <table class="table table-hovered">
+                  <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">Year/Section/Rollno</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+
+                      <% elec2.forEach((e2, index) => { %>
+                        <% if (e2c == e2.elec2_id) {%>
+                          <tr>
+                            <td> <%= e2.year %>/<%= e2.sec %>/<%= e2.stu_id %> </td>
+                            <td> <%= e2.first_name %> </td>
+                            <td> <%= e2.last_name %> </td>
+                          <tr>
+                          <% } %>
+                      <% }) %>
+
+                  </tbody>
+              </table>
+          </div>
+        <% } %>
+      <% }) %>
+    <% } %>
+  <% } %>
+
+
+    <!-- for elective 3 which has sufficient number of students  -->
+    <% if (elec3_array.length > 0) {%>
+
+      <% if (elec3_suff.length > 0) {%>
+        <hr style="margin-bottom:0px; padding-bottom:0px;"/>
+        <hr style="border-top: 2px dashed #8c8b8b; padding-top: 0px; padding-bottom: 1em;"/>
+        <h4 style="text-align: center; text-decoration: underline;"> Elective 3 (Sufficient) </h4>
+        <% elec3_array.forEach((e3c, index) => { %>
+
+          <% if (elec3_suff.includes(e3c)) {%>
+            <div class="table-wrapper">
+
+                <h5 style="padding-bottom: 0.5em;"> <% for (let i=0; i< elec3.length; i++) { %>
+
+                    <% if (e3c == elec3[i].elec3_id) {%>
+                      <%= elec3[i].elec3_name %>
+                        <% break %>
+                    <% } %>
+
+                  <% } %> (<%= e3c %>) </h5>
+
+                <table class="table table-hovered">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Year/Section/Rollno</th>
+                          <th scope="col">First Name</th>
+                          <th scope="col">Last Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% elec3.forEach((e3, index) => { %>
+                          <% if (e3c == e3.elec3_id) {%>
+                            <tr>
+                              <td> <%= e3.year %>/<%= e3.sec %>/<%= e3.stu_id %> </td>
+                              <td> <%= e3.first_name %> </td>
+                              <td> <%= e3.last_name %> </td>
+                            <tr>
+                            <% } %>
+                        <% }) %>
+
+                    </tbody>
+                </table>
+            </div>
+          <% } %>
+        <% }) %>
+      <% } %>
+      <% } %>
+
+
+    <!-- for elective 2 which doesn't have sufficient number of students  -->
+    <% if (elec2_array.length > 0) {%>
+
+      <% if (elec2_not_suff.length > 0) {%>
+        <hr style="margin-bottom:0px; padding-bottom:0px;"/>
+        <hr style="border-top: 2px dashed #8c8b8b; padding-top: 0px; padding-bottom: 1em;"/>
+        <h4 style="text-align: center; text-decoration: underline;"> Elective 2 (Insufficient) </h4>
+        <% elec2_array.forEach((e2c, index) => { %>
+
+          <% if (elec2_not_suff.includes(e2c)) {%>
+            <div class="table-wrapper">
+
+                <h5 style="padding-bottom: 0.5em;"> <% for (let i=0; i< elec2.length; i++) { %>
+
+                    <% if (e2c == elec2[i].elec2_id) {%>
+                      <%= elec2[i].elec2_name %>
+                        <% break %>
+                    <% } %>
+
+                  <% } %> (<%= e2c %>) </h5>
+
+                <table class="table table-hovered">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Year/Section/Rollno</th>
+                          <th scope="col">First Name</th>
+                          <th scope="col">Last Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% elec2.forEach((e2, index) => { %>
+                          <% if (e2c == e2.elec2_id) {%>
+                            <tr>
+                              <td> <%= e2.year %>/<%= e2.sec %>/<%= e2.stu_id %> </td>
+                              <td> <%= e2.first_name %> </td>
+                              <td> <%= e2.last_name %> </td>
+                            <tr>
+                            <% } %>
+                        <% }) %>
+
+                    </tbody>
+                </table>
+            </div>
+          <% } %>
+        <% }) %>
+      <% } %>
+    <% } %>
+
+
+      <!-- for elective 3 which doesn't have sufficient number of students  -->
+      <% if (elec3_array.length > 0) {%>
+
+        <% if (elec3_not_suff.length > 0) {%>
+          <hr style="margin-bottom:0px; padding-bottom:0px;"/>
+          <hr style="border-top: 2px dashed #8c8b8b; padding-top: 0px; padding-bottom: 1em;"/>
+          <h4 style="text-align: center; text-decoration: underline;"> Elective 3 (Insufficient) </h4>
+          <% elec3_array.forEach((e3c, index) => { %>
+
+            <% if (elec3_not_suff.includes(e3c)) {%>
+              <div class="table-wrapper">
+
+                  <h5 style="padding-bottom: 0.5em;"> <% for (let i=0; i< elec3.length; i++) { %>
+
+                      <% if (e3c == elec3[i].elec3_id) {%>
+                        <%= elec3[i].elec3_name %>
+                          <% break %>
+                      <% } %>
+
+                    <% } %> (<%= e3c %>) </h5>
+
+                  <table class="table table-hovered">
+                      <thead class="thead-dark">
+                          <tr>
+                            <th scope="col">Year/Section/Rollno</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+
+                          <% elec3.forEach((e3, index) => { %>
+                            <% if (e3c == e3.elec3_id) {%>
+                              <tr>
+                                <td> <%= e3.year %>/<%= e3.sec %>/<%= e3.stu_id %> </td>
+                                <td> <%= e3.first_name %> </td>
+                                <td> <%= e3.last_name %> </td>
+                              <tr>
+                              <% } %>
+                          <% }) %>
+
+                      </tbody>
+                  </table>
+              </div>
+            <% } %>
+          <% }) %>
+        <% } %>
+        <% } %>
+
+      </div>
+</div>
+</body>
+
+</html>

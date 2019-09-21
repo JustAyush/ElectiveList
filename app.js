@@ -10,7 +10,8 @@ const {
       addPlayerPage, addCourse, deletePlayer, editPlayer, editPlayerPage,
       getStudentList, addStudentPage, addStudent, editStudentPage, editStudent, deleteStudent,
       getInstructorList, addInstructor, addInstructorPage, editInstructorPage, editInstructor, deleteInstructor, assignCourse, assignCoursePage, assignCourseList,assignCourseEditPage,assignCourseEdit,assignCourseDelete,
-      electiveList
+      electiveList,
+      getFinalList
       } = require('./routes/player');
 
 const port = 5000;
@@ -91,6 +92,9 @@ app.post('/instructor/add', addInstructor);
 app.get('/instructor/edit/:id', editInstructorPage);
 app.post('/instructor/edit/:id', editInstructor);
 app.get('/instructor/delete/:id', deleteInstructor);
+
+// route for final list
+app.get('/finalList/:year/:sec', getFinalList);
 
 
 // set the app to listen on the port
