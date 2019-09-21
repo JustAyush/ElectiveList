@@ -1,6 +1,12 @@
 <% include partials/header.ejs %>
     <div class="table-wrapper">
       <% if (students.length > 0) {%>
+          <h2> Import CSV file of list of students </h2>
+          <form action="/api/uploadfile" method="post" enctype="multipart/form-data">
+
+              <input type="file" name="uploadfile" >
+              <input type="submit" value="Upload CSV file" name="uploadfile">
+          </form>
 
         <h2> Students of Batch: <%= year %> <%= sec %> </h2>
 
