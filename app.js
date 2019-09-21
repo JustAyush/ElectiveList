@@ -1,9 +1,12 @@
+const csv = require('fast-csv')
+const multer = require('multer');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
 const app = express();
+const fs = require('fs');
 
 const {getHomePage, postHomePage, getStudentListFromHome, getElectiveList} = require('./routes/index');
 const {
@@ -35,7 +38,112 @@ db.connect((err) => {
     }
     console.log('Connected to database');
 });
+
+
 global.db = db;
+
+global.__basedir = __dirname;
+
+// -> Multer Upload Storage
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+	   cb(null, __basedir + '/uploads/')
+	},
+	filename: (req, file, cb) => {
+	   cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname)
+	}
+});
+
+const upload = multer({storage: storage});
+
+// -> Express Upload RestAPIs
+app.post('/api/uploadfile', upload.single("uploadfile"), (req, res) =>{
+
+
+  try{
+    importCsvData2MySQL(__basedir + '/uploads/' + req.file.filename);
+  } catch (e) {
+    let year_query = "SELECT DISTINCT year FROM `student`"; // query database to get all the player
+
+    // execute query
+    db.query(year_query, (err, result) => {
+        if (err) {
+            res.redirect('/');
+        }
+
+        let year = [];
+        result.forEach((index) => {
+          year.push(index.year);
+        })
+
+        res.render('index.ejs', {
+            title: 'Elective List',
+            year: year,
+            message: "The file was not received.",
+            courses: []
+        });
+    });
+  }
+
+  let year_query = "SELECT DISTINCT year FROM `student`"; // query database to get all the player
+
+  // execute query
+  db.query(year_query, (err, result) => {
+      if (err) {
+          res.redirect('/');
+      }
+
+      let year = [];
+      result.forEach((index) => {
+        year.push(index.year);
+      })
+
+      res.render('index.ejs', {
+          title: 'Elective List',
+          year: year,
+          message: "CSV file has been imported successfully. Go check Student List",
+          courses: []
+      });
+  });
+
+	// res.json({
+	// 			'msg': 'File uploaded/import successfully!', 'file': req.file
+	// 		});
+});
+
+
+// -> Import CSV File to MySQL database
+function importCsvData2MySQL(filePath){
+    let stream = fs.createReadStream(filePath);
+    let csvData = [];
+    let csvStream = csv
+        .parse()
+        .on("data", function (data) {
+            csvData.push(data);
+        })
+        .on("end", function () {
+            // Remove Header ROW
+            csvData.shift();
+
+             console.log(csvData);
+            // Open the MySQL connection
+
+
+            let query = 'INSERT IGNORE INTO student (year, sec, stu_id,first_name, last_name) VALUES ?';
+            db.query(query, [csvData], (error, response) => {
+                console.log(error || response);
+            });
+
+
+
+			// delete file after saving to MySQL database
+			// -> you can comment the statement to see the uploaded CSV file.
+			fs.unlinkSync(filePath)
+        });
+
+    stream.pipe(csvStream);
+}
+
 
 // configure middleware
 app.set('port', process.env.port || port); // set express to use this port
@@ -50,6 +158,8 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json()); // parse form data client
 app.use(express.static(path.join(__dirname, 'public'))); // configure express to use public folder
 app.use(fileUpload()); // configure fileupload
+
+
 
 // routes for the app
 

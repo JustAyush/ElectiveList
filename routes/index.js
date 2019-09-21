@@ -16,6 +16,7 @@ module.exports = {
             res.render('index.ejs', {
                 title: 'Elective List',
                 year: year,
+                message: "",
                 courses: []
             });
         });

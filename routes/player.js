@@ -4,8 +4,11 @@ module.exports = {
 
   assignCoursePage: (req, res) => {
 
-    let elective2 = 'SELECT * FROM elective2';
-    let elective3 = 'SELECT * FROM elective3';
+    let year = req.params.year;
+    let sec = req.params.sec;
+
+    let elective2 = "SELECT * FROM elective2 WHERE elec2_sec ='"+ sec + "';";
+    let elective3 = "SELECT * FROM elective3 WHERE elec3_sec ='" + sec +"';";
 
     db.query(elective2, (err, result) => {
       if (err) {
@@ -249,9 +252,6 @@ module.exports = {
           elec3_id = result2[0].elec3_id;
         }
 
-
-
-
             let query = "UPDATE `takes` SET `elec2_id` = '" + elec2_id + "', `elec3_id` = '" + elec3_id + "' WHERE year = '" + year + "' AND  sec = '" + sec + "' AND stu_id = '" + stu_id + "';";
 
             db.query(query, (err, result) => {
@@ -400,8 +400,11 @@ module.exports = {
 
   editInstructorPage: (req, res) => {
 
+    let ins_id = req.params.id;
+    // let instructor = "SELECT * FROM instructor WHERE ins_id = '"+ ins_id +"';";
+
     let elective2 = 'SELECT * FROM elective2';
-    let elective3 = 'SELECT * FROM elective3';
+    let elective3 = 'SELECT * FROM elective3; SELECT * FROM instructor WHERE ins_id = ? ;';
 
     db.query(elective2, (err, result) => {
       if (err) {
@@ -410,18 +413,23 @@ module.exports = {
 
       let elective2_list = result;
 
-      db.query(elective3, (err, result) => {
+      db.query(elective3, [ins_id] , (err, result) => {
         if (err) {
           return res.status(500).send(err);
         }
 
-        let elective3_list = result;
+        let elective3_list = result[0];
+
+        console.log("------here--------");
+        console.log(result[1][0]);
 
         res.render('editInstructor.ejs', {
           title: 'Elective List',
           message: '',
           elective2: elective2_list,
           elective3: elective3_list,
+          instructor: result[1][0]
+
         });
       });
 
@@ -750,10 +758,24 @@ module.exports = {
 
   editStudentPage: (req, res) => {
 
-    res.render('editStudent.ejs', {
-      title: 'Elective List',
-      message: ''
+    let stu_id = req.params.id;
+    let year= req.params.year;
+    let sec = req.params.sec;
+
+    let query = "SELECT * FROM `student` WHERE year = '" + year + "' AND sec = '" + sec + "' AND stu_id = '" + stu_id+ "' ";
+
+    db.query(query, (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      res.render('editStudent.ejs', {
+        title: 'Elective List',
+        message: '',
+        student: result[0]
+      });
     });
+
   },
 
   editStudent: (req, res) => {
