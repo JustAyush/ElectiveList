@@ -6,14 +6,15 @@
 
         <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
             <div class="form-row">
+            <% students.forEach((student, index) => { %>
+                <div class="form-group col-md-4">
+                  <input type="text" class="form-control" name="f_name" id="first-name" placeholder="First Name"  value=<%=student.first_name%>  required>
+                </div>
 
-              <div class="form-group col-md-4">
-                <input type="text" class="form-control" name="f_name" id="first-name" placeholder="First Name" required>
-              </div>
-
-              <div class="form-group col-md-4">
-                <input type="text" class="form-control" name="l_name" id="last-name" placeholder="Last Name" required>
-              </div>
+                <div class="form-group col-md-4">
+                  <input type="text" class="form-control" name="l_name" id="last-name" placeholder="Last Name"  value=<%=student.last_name%> required>
+                </div>
+              <% }) %>
 
             <button type="submit" class="btn btn-primary float-right">Edit Student</button>
         </form>

@@ -11,17 +11,17 @@
 
                 <div class="form-group col-md-4">
                     <select id="elective2" name="elective2" class="form-control" required>
-                      <option selected disabled>Choose Elective 2</option>
-                    <% elective2.forEach((elec, index) => { %>
-                        <option><%= elec.elec2_name %>(<%= elec.elec2_sec %>)</option>
+                      <option selected disabled><Choose ElectiveII></option>
+                       <% elective2.forEach((elec, index) => { %>
+                        <option><%=elec.elec2_name  %>(<%= elec.elec2_sec %>)</option>
                     <% }) %>
                   </select>
                 </div>
 
                 <div class="form-group col-md-4">
                     <select id="elective3" name="elective3" class="form-control" required>
-                      <option selected disabled>Choose Elective 3</option>
-                    <% elective3.forEach((elec, index) => { %>
+                      <option selected disabled><Choose Elective III></option>
+                      <% elective3.forEach((elec, index) => { %>
                         <option><%= elec.elec3_name %>(<%= elec.elec3_sec %>)</option>
                     <% }) %>
                   </select>
