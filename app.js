@@ -79,7 +79,7 @@ function importCsvData2MySQL(filePath){
             // Open the MySQL connection
 
 
-                    let query = 'INSERT INTO student (year, sec, stu_id,first_name, last_name) VALUES ?';
+                    let query = 'INSERT IGNORE INTO student (year, sec, stu_id,first_name, last_name) VALUES ?';
                     db.query(query, [csvData], (error, response) => {
                         console.log(error || response);
                     });
@@ -154,5 +154,8 @@ app.get('/instructor/delete/:id', deleteInstructor);
 
 // set the app to listen on the port
 app.listen(port, () => {
+
     console.log(`Server running on port: ${port}`);
+
+
 });

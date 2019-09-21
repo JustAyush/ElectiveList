@@ -3,9 +3,13 @@ const fs = require('fs');
 module.exports = {
 
   assignCoursePage: (req, res) => {
+    let year = req.params.year;
+    let sec = req.params.sec;
 
-    let elective2 = 'SELECT * FROM elective2';
-    let elective3 = 'SELECT * FROM elective3';
+
+
+    let elective2 = "SELECT * FROM elective2 WHERE elec2_sec ='"+ sec + "';";
+    let elective3 = "SELECT * FROM elective3 WHERE elec3_sec ='" + sec +"';";
 
     db.query(elective2, (err, result) => {
       if (err) {
