@@ -1,0 +1,45 @@
+<% include partials/header.ejs %>
+    <div class="container">
+        <% if (message != '') { %>
+            <p class="text-center text-danger"><%= message %></p>
+        <% } %>
+
+        <h3> Edit Instructor </h3>
+
+        <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                  <input type="text" class="form-control" name="f_name" id="f_name" placeholder="First Name" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <input type="text" class="form-control" name="l_name" id="l_name" placeholder="Last Name" required>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <select id="elective2" name="elective2" class="form-control" required>
+                      <option selected >Choose Elective 2</option>
+                    <% elective2.forEach((elec, index) => { %>
+                        <option><%= elec.elec2_name %>(<%= elec.elec2_sec %>)</option>
+                    <% }) %>
+                  </select>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <select id="elective3" name="elective3" class="form-control" required>
+                      <option selected >Choose Elective 3</option>
+                    <% elective3.forEach((elec, index) => { %>
+                        <option><%= elec.elec3_name %>(<%= elec.elec3_sec %>)</option>
+                    <% }) %>
+                  </select>
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary float-right">Edit Instructor</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

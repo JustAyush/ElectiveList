@@ -1,0 +1,92 @@
+<% include partials/header.ejs %>
+    <div class="container">
+
+        <div class="container assignCourse">
+          <h4> Students who have taken Electives </h4>
+          <form class="add-player-form" action="/" method="post" enctype="multipart/form-data">
+              <div class="form-row">
+
+                  <div class="form-group col-md-4">
+                      <select id="year" name="year" class="form-control" required>
+                        <option selected disabled required>Choose year</option>
+                      <% year.forEach((year, index) => { %>
+                          <option><%= year %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                      <select id="section" name="section" class="form-control" required>
+                        <option selected disabled required>Choose section</option>
+                          <option>BEX</option>
+                          <option>BCT</option>
+                    </select>
+                  </div>
+
+              </div>
+
+              <button type="submit" class="btn btn-primary float-right">Done</button>
+          </form>
+        </div>
+
+        <div class="container studentList">
+          <h4> Student List </h4>
+          <form class="add-player-form" action="/getStudentList" method="post" enctype="multipart/form-data">
+              <div class="form-row">
+
+                  <div class="form-group col-md-4">
+                      <select id="year_stuList" name="year" class="form-control" required>
+                        <option selected disabled required>Choose year</option>
+                      <% year.forEach((year, index) => { %>
+                          <option><%= year %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                      <select id="section_stuList" name="section" class="form-control" required>
+                        <option selected disabled required>Choose section</option>
+                          <option>BEX</option>
+                          <option>BCT</option>
+                    </select>
+                  </div>
+
+              </div>
+
+              <button type="submit" class="btn btn-primary float-right">Done</button>
+          </form>
+        </div>
+
+        <div class="container electiveList">
+          <h4> Elective List </h4>
+          <form class="add-player-form" action="/getElectiveList" method="post" enctype="multipart/form-data">
+              <div class="form-row">
+
+                  <div class="form-group col-md-4">
+                      <select id="elec_no_elecList" name="elec_no" class="form-control" required>
+                        <option selected disabled required>Choose elective number</option>
+                        <option> Elective 2 </option>
+                        <option> Elective 3 </option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                      <select id="section_elecList" name="section" class="form-control" required>
+                        <option selected disabled required>Choose section</option>
+                          <option>BEX</option>
+                          <option>BCT</option>
+                    </select>
+                  </div>
+
+              </div>
+
+              <button type="submit" class="btn btn-primary float-right">Done</button>
+          </form>
+        </div>
+
+
+
+    </div>
+</div>
+</body>
+</html>
