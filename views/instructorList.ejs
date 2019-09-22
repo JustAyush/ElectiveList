@@ -1,6 +1,8 @@
 <% include partials/header.ejs %>
+  <div class="container">
     <div class="table-wrapper">
       <% if (instructors.length > 0) {%>
+        <h2> Instructor List</h2>
         <table class="table table-hovered">
             <thead class="thead-dark">
                 <tr>
@@ -27,10 +29,10 @@
 
 
       <% } else { %>
-          <p class="text-center">No Electives found. Go <a href="/add" >here</a> to new elective.</p>
+          <p class="text-center">No instructor found.</p>
       <% } %>
 
-
+  </div>
 
 
     </div>

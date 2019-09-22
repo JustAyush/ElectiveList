@@ -4,6 +4,8 @@
             <p class="text-center text-danger"><%= message %></p>
         <% } %>
 
+        <h2 style="padding-top: 1.5em;"> Edit Student </h2>
+
         <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
             <div class="form-row">
 
@@ -15,7 +17,10 @@
                 <input type="text" class="form-control" name="l_name" id="last-name" placeholder="Last Name" required value=<%= student.last_name %> >
               </div>
 
-            <button type="submit" class="btn btn-primary float-right">Edit Student</button>
+              <div class="form-group col-md-4">
+                <button type="submit" class="btn btn-primary float-right">Edit Student</button>
+              </div>
+            </div>
         </form>
     </div>
 </div>

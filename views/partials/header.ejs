@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!--<link rel="stylesheet" href="/assets/css/custom.css">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title><%= title %></title>
 </head>
 <style>
@@ -26,13 +29,61 @@
 <body>
 <div class="page-wrapper">
     <nav class="navbar navbar-light bg-light">
-        <span class="navbar-brand mb-0 h1" ><a href="/"> Elective Student List</a></span>
-        <div class="float-right">
+        <span class="navbar-brand mb-0 h1" style="padding-left: 4em;" ><a href="/"> Elective Student List</a></span>
+        <div class="float-right" style="padding-right: 4em;">
           <a href="/" style="padding-right: 2em;"> Home </a>
-          <a href="#" style="padding-right: 2em;"> About </a>
+          <a href="#" data-toggle="modal" data-target="#myModal" style="padding-right: 2em;"> About </a>
+
           <a href="/student/add" title="Add a New Student" style="padding-right: 2em;">Add Student</a>
           <a href="/instructor/add" title="Add a New Instructor" style="padding-right: 2em;">Add Instructor </a>
           <a href="/instructor" style="padding-right: 2em;"> Instructor List </a>
 
         </div>
     </nav>
+
+
+    <!-- The Modal -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" style="font-weight: bold;">Elective Student List <span style="font-size:12px; font-style: italic;"> made by Aatish and Ayush </span> </h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+
+          <p>Elective Student List is a small project made as per the requirement of DBMS course.</p>
+          <p style="text-align: center; font-size: 15px;"> Members: </p>
+          <div class="row">
+            <div class="col-md-4">
+              <p style=""> Aatish Shakya (072/BEX/401) </p>
+            </div>
+            <div class="col-md-4">
+              <p> Alok Regmi (072/BEX/403) </p>
+            </div>
+            <div class="col-md-4">
+              <p> Ayush Bajracharya (072/BEX/407) </p>
+            </div>
+          </div>
+
+          <p> Features: </p>
+          <ul>
+            <li> Check the Elective 2 and 3 list (8th semester) </li>
+            <li> Check instrutor list and student list (of particular year and section (BEX/BCT)) </li>
+            <li> CRUD operation with instructor and student </li>
+            <li> Choose Elective 2 and 3 subjects for individual student (and edit/delete them) </li>
+            <li> Add students by importing a csv file </li>
+            <li> Get the final list of elective student list containing separate list of electives which have
+              reached 12 students and which have not
+            </li>
+          </ul>
+
+        </div>
+
+      </div>
+    </div>
+  </div>

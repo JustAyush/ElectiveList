@@ -10,7 +10,6 @@ const fs = require('fs');
 
 const {getHomePage, postHomePage, getStudentListFromHome, getElectiveList} = require('./routes/index');
 const {
-      addPlayerPage, addCourse, deletePlayer, editPlayer, editPlayerPage,
       getStudentList, addStudentPage, addStudent, editStudentPage, editStudent, deleteStudent,
       getInstructorList, addInstructor, addInstructorPage, editInstructorPage, editInstructor, deleteInstructor, assignCourse, assignCoursePage, assignCourseList,assignCourseEditPage,assignCourseEdit,assignCourseDelete,
       electiveList,
@@ -162,14 +161,6 @@ app.use(fileUpload()); // configure fileupload
 
 
 // routes for the app
-
-//routes of Course
-// app.get('/', getHomePage);
-// app.get('/add', addPlayerPage);
-// app.get('/edit/:id', editPlayerPage);
-// app.get('/delete/:id', deletePlayer);
-// app.post('/add', addCourse);
-// app.post('/edit/:id', editPlayer);
 
 // route for homepage
 app.get('/', getHomePage);

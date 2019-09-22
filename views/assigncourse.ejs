@@ -4,12 +4,12 @@
             <p class="text-center text-danger"><%= message %></p>
         <% } %>
 
-        <h3> Choose Course </h3>
+        <h2 style="padding-top: 1.5em;"> Choose Course </h2>
 
         <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
             <div class="form-row">
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-5">
                     <select id="elective2" name="elective2" class="form-control" required>
                       <option selected disabled>Choose Elective 2</option>
                     <% elective2.forEach((elec, index) => { %>
@@ -18,7 +18,7 @@
                   </select>
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-5">
                     <select id="elective3" name="elective3" class="form-control" required>
                       <option selected disabled>Choose Elective 3</option>
                     <% elective3.forEach((elec, index) => { %>
@@ -27,8 +27,12 @@
                   </select>
                 </div>
 
+              <div class="form-group col-md-2">
+                <button type="submit" class="btn btn-primary float-right">Assign</button>
+              </div>
+
             </div>
 
-            <button type="submit" class="btn btn-primary float-right">Assign</button>
+
         </form>
     </div>

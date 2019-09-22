@@ -1,4 +1,6 @@
 <% include partials/header.ejs %>
+
+  <div class="container">
     <div class="table-wrapper">
 
       <% if (electiveList.length > 0) {%>
@@ -35,13 +37,12 @@
 
 
       <% } else { %>
-          <p class="text-center">No Electives found. Go <a href="/add" >here</a> to new elective.</p>
+          <p class="text-center">No Electives found.</p>
       <% } %>
 
-
-
-
     </div>
+
+  </div>
 </div>
 </body>
 

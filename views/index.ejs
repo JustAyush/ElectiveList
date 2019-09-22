@@ -1,11 +1,15 @@
 <% include partials/header.ejs %>
-    <div class="container">
+    <div class="container" style="padding-left:12em; padding-right: 2em;">
 
       <% if (message != '') { %>
-          <p class="text-center text-success" style="font-size:1.2em; padding:0.5em;" ><%= message %></p>
+          <% if (message != 'The file was not received.') { %>
+            <p class="text-center text-success" style="font-size:1.2em; padding:0.5em;" ><%= message %></p>
+          <% } else { %>
+            <p class="text-center text-danger" style="font-size:1.2em; padding:0.5em;" ><%= message %></p>
+          <% } %>
       <% } %>
 
-        <div class="container assignCourse">
+        <div class="container assignCourse" style="padding-top:2em;">
           <h4> Students who have taken Electives </h4>
           <form class="add-player-form" action="/" method="post" enctype="multipart/form-data">
               <div class="form-row">
@@ -27,9 +31,14 @@
                     </select>
                   </div>
 
+              <div class="form-group col-md-1">
+                <button type="submit" class="btn btn-primary float-right">Done</button>
               </div>
 
-              <button type="submit" class="btn btn-primary float-right">Done</button>
+              <div class="form-group col-md-3">
+              </div>
+
+              </div>
           </form>
         </div>
 
@@ -55,9 +64,14 @@
                     </select>
                   </div>
 
+                <div class="form-group col-md-1">
+                  <button type="submit" class="btn btn-primary float-right">Done</button>
+                </div>
+
+                <div class="form-group col-md-3">
+                </div>
               </div>
 
-              <button type="submit" class="btn btn-primary float-right">Done</button>
           </form>
         </div>
 
@@ -82,18 +96,41 @@
                     </select>
                   </div>
 
+                <div class="form-group col-md-1">
+                <button type="submit" class="btn btn-primary float-right">Done</button>
+                </div>
+
+                <div class="form-group col-md-3">
+                </div>
               </div>
 
-              <button type="submit" class="btn btn-primary float-right">Done</button>
           </form>
         </div>
 
-        <div class="container csvImport">
+        <div class="container csvImport" style="padding-top: 2em;">
 
-          <h6> You can import csv file to fill up the student list.</h6>
+          <h5> You can import csv file to fill up the student list.</h5>
           <form class="add-player-form" action="/api/uploadfile" method="post" enctype="multipart/form-data">
-            <input type="file" name="uploadfile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-            <button type="submit" class="btn btn-primary float-right">Import CSV</button>
+            <div class="form-row">
+
+              <div class="form-group col-md-6">
+                <div class="file_input">
+                <div class="button-wrap">
+                  <label class ="new-button" for="upload"> Choose File
+                  <input type="file" id="upload" color="blue;" name="uploadfile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                </div>
+               </div>
+              </div>
+
+              <div class="form-group col-md-2">
+              </div>
+              <div class="form-group col-md-1">
+                <button type="submit" class="btn btn-primary float-right">Import CSV</button>
+              </div>
+              <div class="form-group col-md-3">
+              </div>
+
+            </div>
           </form>
 
         </div>
@@ -101,4 +138,35 @@
     </div>
 </div>
 </body>
+<style>
+
+input[type="file"] {
+  position: absolute;
+  z-index: -1;
+  top: 6px;
+  left: 5px;
+  font-size: 15px;
+  color: rgb(153,153,153);
+}
+
+.button-wrap {
+  position: relative;
+}
+
+.new-button {
+    display: inline-block;
+    padding: 8px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #5885f5;
+    font-size: 16px;
+    color: #fff;
+}
+
+.new-button:hover {
+    background-color: #3265e3;
+}
+
+</style>
+
 </html>
