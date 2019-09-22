@@ -5,11 +5,8 @@ module.exports = {
   //for course assigned
   assignCoursePage: (req, res) => {
 
-    let year = req.params.year;
-    let sec = req.params.sec;
-
-    let elective2 = "SELECT * FROM elective2 WHERE elec2_sec ='"+ sec + "';";
-    let elective3 = "SELECT * FROM elective3 WHERE elec3_sec ='" + sec +"';";
+    let elective2 = "SELECT * FROM elective2;";
+    let elective3 = "SELECT * FROM elective3;";
 
     db.query(elective2, (err, result) => {
       if (err) {
@@ -856,7 +853,7 @@ module.exports = {
                   let elec2_suff = [], elec2_not_suff = [];
 
                   for(let i=0; i<elec2_array_v.length; i++){
-                    if (elec2_array_v[i] > 2) {
+                    if (elec2_array_v[i] > 11) {
                       elec2_suff.push(elec2_array_k[i]);
                     } else {
                       elec2_not_suff.push(elec2_array_k[i]);
@@ -866,7 +863,7 @@ module.exports = {
                   let elec3_suff = [], elec3_not_suff = [];
 
                   for(let i=0; i<elec3_array_v.length; i++){
-                    if (elec3_array_v[i] > 2) {
+                    if (elec3_array_v[i] > 11) {
                       elec3_suff.push(elec3_array_k[i]);
                     } else {
                       elec3_not_suff.push(elec3_array_k[i]);
