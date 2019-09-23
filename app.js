@@ -38,9 +38,16 @@ db.connect((err) => {
     console.log('Connected to database');
 });
 
-
 global.db = db;
 
+
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+
+
+
+// this is done for importing the csv file to populate the student table
 global.__basedir = __dirname;
 
 // -> Multer Upload Storage
@@ -133,8 +140,6 @@ function importCsvData2MySQL(filePath){
                 console.log(error || response);
             });
 
-
-
 			// delete file after saving to MySQL database
 			// -> you can comment the statement to see the uploaded CSV file.
 			fs.unlinkSync(filePath)
@@ -142,6 +147,7 @@ function importCsvData2MySQL(filePath){
 
     stream.pipe(csvStream);
 }
+
 
 
 // configure middleware

@@ -3,6 +3,7 @@ const fs = require('fs');
 module.exports = {
 
   //for course assigned
+
   assignCoursePage: (req, res) => {
 
     let elective2 = "SELECT * FROM elective2;";
@@ -43,6 +44,7 @@ module.exports = {
     let elective2_section = req.body.elective2;
     let elective2, elective2_sec, elective3, elective3_sec;
 
+    // to select elective name and section from DBMS (BEX)
     try{
       elective2_sec = elective2_section.match(/\(([^)]+)\)/)[1];
       elective2 = elective2_section.replace(/\([^\)]*\)/g, '').match(/(\S+)/g);
